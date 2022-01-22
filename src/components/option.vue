@@ -10,17 +10,12 @@
       </span>
   </div>
 </template>
-
 <script>
-
 export default {
   name: 'App',
   props: {
     option: Object
   },
-  methods: {
-    
-  }
 };
 </script>
 <style scoped> 

@@ -3,7 +3,7 @@
    	<div>
 		<multiselect 
 		 	v-model="value" 
-		 	:options="countries" 
+		 	:options="options" 
 		 	placeholder="Select one" 
 		 	:custom-label="nameWithLang"
 		 	:searchable="true" 
@@ -23,21 +23,13 @@
 		  	:multiple="true"
 		  	@select="selectOption(value)"
 		>
-
 	  		<template slot="option" slot-scope="props">
 	  			<searchOption :option="props.option"/>
 	  		</template>
-
 	  		<span slot="noResult">Oops! No elements found. Consider changing the search query.</span>
-		</multiselect>
-
-
-	
+		</multiselect>	
 	</div>
-
-
   </div>
-
 </template>
 
 <script>
@@ -52,8 +44,7 @@ export default {
    	data() {
       return {
        	value: null,
-       	selectedCountries: [],
-        countries: [],
+        options: [],
         isLoading: false
       }
   	},
@@ -61,15 +52,12 @@ export default {
   		nameWithLang ({ name, alias }) {
 	      	return  alias ? '@' + alias : name
 	    },
-   		clearSelected () {
-   			this.selectedCountries = []
-   		},
 	    asyncFind (query) {
 	      if(query.length > 2) {
 	      	this.isLoading = true
 	      	axios.get("https://habr.com/kek/v2/publication/suggest-mention?q=" + query)
           	.then(res => {
-          		this.countries = res.data.data
+          		this.options = res.data.data
           		this.isLoading = false
           	})
           	.catch(err => console.log(err));
@@ -81,14 +69,10 @@ export default {
 	    		this.value.pop()
 	    	}
 	    },
-	    clearAll () {
-	      this.selectedCountries = []
-	    }
    	},
    	created() {
    		this.asyncFind('aaa')
    	}
- 
 }
 </script>
 <style scoped>
