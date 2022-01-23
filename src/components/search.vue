@@ -3,7 +3,7 @@
 		<multiselect 
 		 	v-model="value" 
 		 	:options="options" 
-		 	placeholder="Выберите один" 
+		 	:placeholder="searchPlaceholder"
 		 	:custom-label="nameWithLang"
 		 	:searchable="true" 
 		  	:loading="isLoading" 
@@ -43,6 +43,9 @@ import searchOption from '../components/option.vue'
 
 export default {
   	name: 'searcher',
+  	props: {
+  		searchPlaceholder: ''
+  	},
   	components: { Multiselect, searchOption },
    	data() {
       return {
@@ -66,7 +69,7 @@ export default {
 	    asyncFind (query) {
 	      if(query.length > 2) {
 	      	this.isLoading = true
-	      	axios.get("https://habr.com/kek/v2/publication/suggest-mention?q=" + query)
+	      	axios.get(process.env.VUE_APP_HABR_API + "?q=" + query)
           	.then(res => {
           		this.options = res.data.data
           		this.isLoading = false

@@ -1,6 +1,6 @@
 <template>
   <div class="home">   
-   	<searchOptions />
+   	<searchOptions :searchPlaceholder="propPlaceholder"/>
   </div>
 </template>
 
@@ -12,14 +12,8 @@ export default {
   	components: { searchOptions },
    	data() {
       return {
-       
+      	propPlaceholder: 'Выберите один'
       }
   	},
-  	methods: {
-  		
-   	},
-   	created() {
-   		
-   	}
 }
 </script>
