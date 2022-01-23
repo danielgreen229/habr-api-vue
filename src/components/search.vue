@@ -1,9 +1,10 @@
 <template>
   	<div class="searcher">   
   		<div class="change-multiselect-button__container">
-  			<button class="change-multiselect__button" @click="multipleSelect = !multipleSelect">{{textSelectButton}}</button>
+  			<button ref="multiselectButton" class="change-multiselect__button" @click="multipleSelect = !multipleSelect">{{textSelectButton}}</button>
   		</div>
 		<multiselect 
+			ref="multiselect"
 		 	v-model="value" 
 		 	:options="options" 
 		 	:placeholder="searchPlaceholder"
@@ -26,6 +27,7 @@
 		  	:multiple="true"
 		  	@select="selectOption(value)"
 		  	noOptions="Начните поиск"
+		  	:open="false"
 		>
 	  		<template slot="option" slot-scope="props">
 	  			<searchOption :option="props.option"/>
@@ -105,10 +107,26 @@ export default {
 	    		this.value.pop()
 	    	}
 	    },
+	    onKeyDown(e) {
+            if(e.code == "Enter") {
+            	this.$refs.multiselect.isOpen = true
+            	setTimeout(() => {
+            		let className = 'multiselect__input';
+            		document.getElementsByClassName(className)[0].focus();
+            	}, 500)
+            }
+            if(e.code == "Escape") {
+            	this.$refs.multiselectButton.focus()
+            }
+        }
    	},
    	created() {
    		this.asyncFind('aaa')
-   	}
+   		document.addEventListener('keydown', this.onKeyDown)
+   	},
+   	beforeDestroy() {
+        document.removeEventListener('keydown', this.onKeyDown)
+    },
 }
 </script>
 <style scoped>
