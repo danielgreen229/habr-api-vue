@@ -12,7 +12,7 @@ export default {
   	components: { searchOptions },
    	data() {
       return {
-      	propPlaceholder: 'Выберите один'
+      	propPlaceholder: 'Поиск'
       }
   	},
 }

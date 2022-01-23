@@ -1,5 +1,8 @@
 <template>
   	<div class="searcher">   
+  		<div class="change-multiselect-button__container">
+  			<button class="change-multiselect__button" @click="multipleSelect = !multipleSelect">{{textSelectButton}}</button>
+  		</div>
 		<multiselect 
 		 	v-model="value" 
 		 	:options="options" 
@@ -12,7 +15,8 @@
 		  	:clear-on-select="true" 
 		  	:close-on-select="true" 
 		  	:options-limit="300" 
-		  	:limit="3" 
+		  	:limit="10" 
+		  	:limit-text="limitText"
 		 	track-by="alias"
 		 	:max-height="220" 
 		  	:show-no-results="true" 
@@ -21,6 +25,7 @@
 		  	selectLabel=""
 		  	:multiple="true"
 		  	@select="selectOption(value)"
+		  	noOptions="Начните поиск"
 		>
 	  		<template slot="option" slot-scope="props">
 	  			<searchOption :option="props.option"/>
@@ -52,17 +57,34 @@ export default {
        	value: null,
         options: [],
         isLoading: false,
-        error: ''
+        error: '',
+        multipleSelect: true,
       }
+  	},
+  	computed: {
+  		textSelectButton () {
+  			return !this.multipleSelect ? 'Множественный выбор' : 'Одиночный выбор'
+  		},
   	},
   	watch: {
     	error () {		
     		setTimeout (() => {
 	   			this.error = ''
 	   		}, 3000)
+    	},
+    	multipleSelect () {
+    		this.value = null
+    	},
+    	options () {
+    		if(this.options === null || this.options.length == 0) {
+    			this.asyncFind('aaa')
+    		}
     	}
 	},
   	methods: {
+  		limitText (count) {
+	      return `и ${count} других пользователей`
+	    },
   		nameWithLang ({ name, alias }) {
 	      	return  alias ? '@' + alias : name
 	    },
@@ -78,7 +100,7 @@ export default {
 	      }	
 	    },
 	    selectOption (value) {
-	    	if(this.value != null && this.value.length > 0) {
+	    	if(this.value != null && this.value.length > 0 && !this.multipleSelect) {
 	    		this.value[0] = this.value[1]
 	    		this.value.pop()
 	    	}
@@ -90,6 +112,21 @@ export default {
 }
 </script>
 <style scoped>
+.change-multiselect-button__container {
+	display: flex;
+	justify-content: flex-start;
+}
+.change-multiselect__button {
+	text-decoration: none;
+	color: white;
+	background-color: #9989f1db;
+	border: none;
+	border-radius: 0.5em;
+	padding: 0.8em 3em;
+    width: 17em;
+	margin-bottom: 8px;
+	cursor: pointer;
+}
 .search-error__container {
 	color: white;
     background-color: #f1a689;
@@ -102,14 +139,14 @@ export default {
     width: calc(100% - 16px);
 }
 .slide-fade-enter-active {
-  transition: all .3s ease;
+  	transition: all .3s ease;
 }
 .slide-fade-leave-active {
-  transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+  	transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
 }
 .slide-fade-enter, .slide-fade-leave-to {
-  transform: translateY(-1em);
-  opacity: 0;
+  	transform: translateY(-1em);
+  	opacity: 0;
 }
 >>>.multiselect__tag {
 	background: #91a8ba;

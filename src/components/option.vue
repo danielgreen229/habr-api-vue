@@ -21,16 +21,16 @@ export default {
 <style scoped> 
 .option__container {
   display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
 }
 .option__image {
   height: 2em;
   width: 2em;
   border-radius: 0.3em;
   background-repeat: no-repeat;
-    background-size: contain;
+  background-size: contain;
 }
 .option__desc {
   display: flex;
